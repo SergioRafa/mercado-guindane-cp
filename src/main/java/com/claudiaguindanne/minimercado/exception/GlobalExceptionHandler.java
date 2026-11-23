@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(
-            HttpStatus.Status status,
+            HttpStatus status,
             String erro,
             String mensagem,
             String caminho,
