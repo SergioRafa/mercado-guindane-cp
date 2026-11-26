@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
-    public ResponseEntity> handleRecursoNaoEncontrado(
+    public ResponseEntity<Map<String, Object>> handleRecursoNaoEncontrado(
             RecursoNaoEncontradoException ex,
             HttpServletRequest request
     ) {
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity> handleValidation(
+    public ResponseEntity<Map<String, Object>> handleValidation(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity> handleIllegalArgument(
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(
             IllegalArgumentException ex,
             HttpServletRequest request
     ) {
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity> handleDataIntegrity(
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(
             DataIntegrityViolationException ex,
             HttpServletRequest request
     ) {
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity> handleResponseStatus(
+    public ResponseEntity<Map<String, Object>> handleResponseStatus(
             ResponseStatusException ex,
             HttpServletRequest request
     ) {
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity> handleGeneric(
+    public ResponseEntity<Map<String, Object>> handleGeneric(
             Exception ex,
             HttpServletRequest request
     ) {
@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    private ResponseEntity> buildResponse(
+    private ResponseEntity<Map<String, Object>> buildResponse(
             HttpStatus status,
             String erro,
             String mensagem,

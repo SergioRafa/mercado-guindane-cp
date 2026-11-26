@@ -47,7 +47,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/valor-por-categoria")
-    public ResponseEntity> calcularValorPorCategoria() {
+    public ResponseEntity<Map<String, BigDecimal>> calcularValorPorCategoria() {
         return ResponseEntity.ok(produtoService.calcularValorPorCategoria());
     }
 
@@ -57,7 +57,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/financeiro/resumo")
-    public ResponseEntity> obterResumoFinanceiro() {
+    public ResponseEntity<Map<String, BigDecimal>> obterResumoFinanceiro() {
         return ResponseEntity.ok(produtoService.obterResumoFinanceiro());
     }
 
