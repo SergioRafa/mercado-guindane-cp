@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping({ "/", "/api/status" })
-    public ResponseEntity> status() {
+    public ResponseEntity<?> status() {
         return ResponseEntity.ok(Map.of(
                 "status", "ONLINE",
                 "projeto", "Mercado Guindane CP",
