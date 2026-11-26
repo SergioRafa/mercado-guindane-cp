@@ -3,6 +3,7 @@ package com.claudiaguindanne.minimercado.service;
 import com.claudiaguindanne.minimercado.dto.ItemVendaRequestDTO;
 import com.claudiaguindanne.minimercado.dto.VendaRequestDTO;
 import com.claudiaguindanne.minimercado.dto.VendaResponseDTO;
+import com.claudiaguindanne.minimercado.exception.EstoqueInsuficienteException;
 import com.claudiaguindanne.minimercado.model.ItemPedido;
 import com.claudiaguindanne.minimercado.model.Pedido;
 import com.claudiaguindanne.minimercado.model.Produto;
@@ -36,7 +37,7 @@ public class VendaService {
 
             int estoqueAtual = produto.getQuantidadeEstoque() != null ? produto.getQuantidadeEstoque() : 0;
             if (estoqueAtual < itemReq.quantidade()) {
-                throw new IllegalArgumentException(
+                throw new EstoqueInsuficienteException(
                         "Estoque insuficiente para '" + produto.getNome() + "'. Disponivel: " + estoqueAtual
                 );
             }
