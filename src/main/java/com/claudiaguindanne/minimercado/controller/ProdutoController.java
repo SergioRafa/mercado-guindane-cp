@@ -28,9 +28,7 @@ public class ProdutoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
-        return produtoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
     @GetMapping("/categoria/{categoria}")
@@ -49,7 +47,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/valor-por-categoria")
-    public ResponseEntity<Map<String, BigDecimal>> calcularValorPorCategoria() {
+    public ResponseEntity> calcularValorPorCategoria() {
         return ResponseEntity.ok(produtoService.calcularValorPorCategoria());
     }
 
@@ -59,7 +57,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/financeiro/resumo")
-    public ResponseEntity<Map<String, BigDecimal>> obterResumoFinanceiro() {
+    public ResponseEntity> obterResumoFinanceiro() {
         return ResponseEntity.ok(produtoService.obterResumoFinanceiro());
     }
 
@@ -70,22 +68,17 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody @Valid Produto produtoDetalhes) {
-        return produtoService.atualizar(id, produtoDetalhes)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(produtoService.atualizar(id, produtoDetalhes));
     }
 
     @PatchMapping("/{id}/baixa")
     public ResponseEntity<Produto> darBaixaEstoque(@PathVariable Long id, @RequestParam int quantidade) {
-        return produtoService.darBaixaEstoque(id, quantidade)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+        return ResponseEntity.ok(produtoService.darBaixaEstoque(id, quantidade));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
-        return produtoService.deletar(id)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        produtoService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

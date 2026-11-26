@@ -1,5 +1,6 @@
 package com.claudiaguindanne.minimercado.service;
 
+import com.claudiaguindanne.minimercado.exception.RecursoNaoEncontradoException;
 import com.claudiaguindanne.minimercado.model.Produto;
 import com.claudiaguindanne.minimercado.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,11 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Optional<Produto> buscarPorId(Long id) {
-        return produtoRepository.findById(id);
+    public Produto buscarPorId(Long id) {
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Produto com id " + id + " nao encontrado."
+                ));
     }
 
     public List<Produto> buscarPorCategoria(String categoria) {
@@ -89,36 +93,31 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public Optional<Produto> atualizar(Long id, Produto produtoDetalhes) {
-        return produtoRepository.findById(id).map(existente -> {
-            existente.setNome(produtoDetalhes.getNome());
-            existente.setCategoria(produtoDetalhes.getCategoria());
-            existente.setPrecoCusto(produtoDetalhes.getPrecoCusto());
-            existente.setPrecoVenda(produtoDetalhes.getPrecoVenda());
-            existente.setQuantidadeEstoque(produtoDetalhes.getQuantidadeEstoque());
-            return produtoRepository.save(existente);
-        });
+    public Produto atualizar(Long id, Produto produtoDetalhes) {
+        Produto existente = buscarPorId(id);
+        existente.setNome(produtoDetalhes.getNome());
+        existente.setCategoria(produtoDetalhes.getCategoria());
+        existente.setPrecoCusto(produtoDetalhes.getPrecoCusto());
+        existente.setPrecoVenda(produtoDetalhes.getPrecoVenda());
+        existente.setQuantidadeEstoque(produtoDetalhes.getQuantidadeEstoque());
+        return produtoRepository.save(existente);
     }
 
-    public Optional<Produto> darBaixaEstoque(Long id, int quantidade) {
+    public Produto darBaixaEstoque(Long id, int quantidade) {
         if (quantidade <= 0) {
-            return Optional.empty();
+            throw new IllegalArgumentException("Quantidade para baixa deve ser maior que zero.");
         }
-        return produtoRepository.findById(id).map(existente -> {
-            int atual = existente.getQuantidadeEstoque() != null ? existente.getQuantidadeEstoque() : 0;
-            if (atual < quantidade) {
-                return null;
-            }
-            existente.setQuantidadeEstoque(atual - quantidade);
-            return produtoRepository.save(existente);
-        });
+        Produto existente = buscarPorId(id);
+        int atual = existente.getQuantidadeEstoque() != null ? existente.getQuantidadeEstoque() : 0;
+        if (atual < quantidade) {
+            throw new IllegalArgumentException("Estoque insuficiente para o produto informado.");
+        }
+        existente.setQuantidadeEstoque(atual - quantidade);
+        return produtoRepository.save(existente);
     }
 
-    public boolean deletar(Long id) {
-        if (!produtoRepository.existsById(id)) {
-            return false;
-        }
-        produtoRepository.deleteById(id);
-        return true;
+    public void deletar(Long id) {
+        Produto existente = buscarPorId(id);
+        produtoRepository.delete(existente);
     }
 }
